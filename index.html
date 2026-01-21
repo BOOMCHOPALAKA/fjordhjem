@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fjordhjem - Hood Canal Waterfront Retreat</title>
+    <title>Fjordhjem - Hood Canal Hygee Retreat</title>
     <meta name="description" content="Escape to a cozy cabin retreat overlooking Hood Canal's pristine fjord waters with breathtaking Olympic Mountain views. Your Pacific Northwest sanctuary awaits.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,55 +59,78 @@
     <section id="about" class="about">
         <div class="container">
             <div class="about-grid">
-                <div class="about-carousel-container">
-                    <div class="about-carousel">
-                        <div class="carousel-slide active">
-                            <img src="images/house-front-redfin.jpg" alt="Cabin overlooking Hood Canal with Olympic Mountain backdrop" loading="lazy">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/house-back.jpg" alt="Waterside view of the property" loading="lazy">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/porch-swing-leaves.jpg" alt="Stunning mountain sunset views" loading="lazy">
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/coffeetable-cacao-mug.jpg" alt="Hood Canal shoreline" loading="lazy">
+                <div class="house-carousel-container">
+                    <button class="house-carousel-btn house-carousel-prev" aria-label="Previous photo">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18L9 12L15 6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <div class="house-carousel-track-wrapper">
+                        <div class="house-carousel-track" id="houseCarouselTrack">
+                            <div class="house-carousel-slide">
+                                <img src="images/house-front-redfin.jpg" alt="Front view of Fjordhjem cabin overlooking Hood Canal">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/house-back.jpg" alt="Back deck view of the cabin with mountain vistas">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/20250116-RX704425.jpg" alt="Cozy interior living space with mountain views">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/20250116-RX704426.jpg" alt="Interior view of the cabin">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/20250117-RX704432.jpg" alt="Cabin interior detail">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/porch-swing-moody.jpg" alt="Cozy porch swing with Hood Canal views">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/desk.jpg" alt="Peaceful workspace with natural light">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/coffeetable-cacao-mug.jpg" alt="Hygge coffee table setting">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/IMG_20251218_114847.jpg" alt="House exterior view">
+                            </div>
+                            <div class="house-carousel-slide">
+                                <img src="images/pergola-moody.jpg" alt="Outdoor pergola area with atmospheric lighting">
+                            </div>
                         </div>
                     </div>
-                    <button class="carousel-btn prev" aria-label="Previous image">
+
+                    <button class="house-carousel-btn house-carousel-next" aria-label="Next photo">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"></polyline>
+                            <path d="M9 18L15 12L9 6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <button class="carousel-btn next" aria-label="Next image">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
-                    <div class="carousel-dots"></div>
+
+                    <div class="house-carousel-dots" id="houseCarouselDots"></div>
                 </div>
                 <div class="about-content">
                     <span class="section-label">Your Retreat</span>
-                    <h2>Come Find Your<br>Hygge by the Water</h2>
-                    <p>Perched 300 feet above Hood Canal's glacial waters, Fjordhjem (that's "Fjord Home" in Norwegian) is where you come to exhale. Wrap yourself in a blanket on the deck, coffee in hand, and watch the mist lift off the mountains. This is the kind of place where time moves differently.</p>
-                    <p>Eagles glide past at eye level. The tide whispers its daily rhythm below. Weather systems roll across the Olympics like slow-motion theater. Inside, it's all warm wood, soft throws, and that particular kind of coziness the Scandinavians call hygge. You know the feeling — candles lit, good people, nowhere else you'd rather be.</p>
+                    <h2>Your Cozy Escape<br>on Hood Canal</h2>
+                    <p>Fjordhjem (Norwegian for "Fjord Home") sits 300 feet above Hood Canal with Olympic Mountain views that'll make you want to stay on the deck all day. It's the kind of place where your only agenda is coffee in the morning, maybe a hike if you feel like it, and definitely some time around the fire pit at night.</p>
+                    <p>The cabin sleeps 7 with two bedrooms, a pull-out sofa, and two full bathrooms. Fully stocked kitchen, lots of blankets, and everything you need to either adventure hard or do absolutely nothing. Your call.</p>
                     
                     <div class="features-grid">
                         <div class="feature">
                             <h3>Sleeps 7</h3>
-                            <p>Two bedrooms plus pull-out sofa for the whole crew</p>
+                            <p>Bring the whole crew</p>
                         </div>
                         <div class="feature">
                             <h3>2 Full Baths</h3>
-                            <p>Everyone gets their space</p>
+                            <p>No fighting over the shower</p>
                         </div>
                         <div class="feature">
-                            <h3>Olympic Views</h3>
-                            <p>Mountains from every window, all day long</p>
+                            <h3>Mountain Views</h3>
+                            <p>Olympics from every window</p>
                         </div>
                         <div class="feature">
                             <h3>Beach Access</h3>
-                            <p>Twanoh Falls State Park is your backyard</p>
+                            <p>5 minutes to the water</p>
                         </div>
                     </div>
                 </div>
@@ -120,37 +143,37 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-label">The Experience</span>
-                <h2>How to Spend Your Days<br>(Hint: However You Want)</h2>
+                <h2>Do Everything<br>Or Do Nothing</h2>
             </div>
 
             <div class="experience-grid">
                 <div class="experience-card">
                     <div class="experience-image">
-                        <img src="images/oysters.jpg" alt="Fresh oysters harvested from Hood Canal" loading="lazy">
+                        <img src="images/oyster-bucket.jpg" alt="Fresh oysters harvested from Hood Canal" loading="lazy">
                     </div>
                     <div class="experience-text">
-                        <h3>Harvest Your Own Dinner</h3>
-                        <p>Low tide at Twanoh Falls State Park means one thing: oyster time. Walk down to the beach, pull fresh oysters straight from the canal, shuck them right there with the mountains watching. It doesn't get more Pacific Northwest than this. Pro tip: bring hot sauce and lemon.</p>
+                        <h3>Harvest Fresh Oysters</h3>
+                        <p>At low tide, walk down to Twanoh Falls State Park and harvest oysters straight from the canal. Shuck them right there on the beach with the mountains watching. Bring hot sauce and lemon — trust us.</p>
                     </div>
                 </div>
 
                 <div class="experience-card reverse">
                     <div class="experience-image">
-                        <img src="images/kayak.jpg" alt="Kayaking on Hood Canal at sunset" loading="lazy">
+                        <img src="images/kayak-sunset.jpg" alt="Kayaking on Hood Canal at sunset" loading="lazy">
                     </div>
                     <div class="experience-text">
-                        <h3>Paddle Until You Feel Like Stopping</h3>
-                        <p>The marina's right there when you want it. Mornings on the canal are glassy and quiet — just you, the paddle rhythm, and mountains reflecting in the water. Go at sunset and the whole sky puts on a show. No rush, no agenda, just float.</p>
+                        <h3>Get Out on the Water</h3>
+                        <p>The marina's close by when you want to kayak. Early mornings are glassy calm, sunsets are unbeatable. No rush, no agenda — just you and the mountains reflecting in the water.</p>
                     </div>
                 </div>
 
                 <div class="experience-card">
                     <div class="experience-image">
-                        <img src="images/eagles.jpg" alt="Bald eagle flying over Hood Canal with mountains in background" loading="lazy">
+                        <img src="images/orca.jpg" alt="Bald eagle flying over Hood Canal with mountains in background" loading="lazy">
                     </div>
                     <div class="experience-text">
-                        <h3>Meet Your Neighbors</h3>
-                        <p>Bald eagles nest nearby and treat the shoreline like their personal fishing spot. During salmon runs, the whole food chain shows up — seals, herons, osprey doing their thing. Grab binoculars and your morning coffee. Nature documentary, live from the deck.</p>
+                        <h3>Wildlife Watching</h3>
+                        <p>Bald eagles nest nearby and fish the shoreline daily. During salmon runs, seals, herons, and osprey show up for the feast. Grab your coffee and binoculars — the deck has front-row seats.</p>
                     </div>
                 </div>
 
@@ -159,8 +182,8 @@
                         <img src="images/salmon.jpg" alt="Salmon in pristine water during spawning season" loading="lazy">
                     </div>
                     <div class="experience-text">
-                        <h3>Witness the Salmon Run</h3>
-                        <p>Come during spawning season and hike up to Twanoh Falls to see thousands of salmon fighting their way upstream. It's humbling, powerful, and one of those things you just have to see. The falls are a quick walk from the cabin — definitely worth the trip.</p>
+                        <h3>Watch the Salmon Run</h3>
+                        <p>During spawning season, take the short hike to Twanoh Falls and watch thousands of salmon fight their way upstream. It's powerful stuff, and definitely worth the walk.</p>
                     </div>
                 </div>
             </div>
@@ -172,27 +195,27 @@
         <div class="container-wide">
             <div class="section-header centered">
                 <span class="section-label">Gallery</span>
-                <h2>See What We Mean<br>About Those Views</h2>
+                <h2>See For<br>Yourself</h2>
             </div>
 
             <div class="gallery-grid">
                 <div class="gallery-item large">
-                    <img src="images/mountains-sunset.jpg" alt="Olympic Mountains at sunset with fog" loading="lazy">
+                    <img src="images/brothers-sunset.jpg" alt="Olympic Mountains at sunset over Hood Canal" loading="lazy">
                 </div>
                 <div class="gallery-item">
-                    <img src="images/marina.jpg" alt="Hood Canal Marina with mountain backdrop" loading="lazy">
+                    <img src="images/union-dock-boat.jpg" alt="Boat at Union dock with mountain backdrop" loading="lazy">
                 </div>
                 <div class="gallery-item">
-                    <img src="images/sunset-sky.jpg" alt="Dramatic sunset colors over Hood Canal" loading="lazy">
+                    <img src="images/twanoh-sunset-clouds.jpg" alt="Sunset clouds over Hood Canal" loading="lazy">
                 </div>
                 <div class="gallery-item tall">
-                    <img src="images/forest-mountains.jpg" alt="Forest-covered hillsides with Olympic Mountains" loading="lazy">
+                    <img src="images/porch-swing-leaves.jpg" alt="Cozy porch swing view" loading="lazy">
                 </div>
                 <div class="gallery-item wide">
-                    <img src="images/shoreline.jpg" alt="Hood Canal waterfront community" loading="lazy">
+                    <img src="images/across-water-mountain-trees-houses.jpg" alt="Hood Canal waterfront with mountains" loading="lazy">
                 </div>
                 <div class="gallery-item">
-                    <img src="images/waterside.jpg" alt="Dock extending into Hood Canal waters" loading="lazy">
+                    <img src="images/dock-sunset-cloud-twanoh.jpg" alt="Dock at Twanoh at sunset" loading="lazy">
                 </div>
             </div>
         </div>
@@ -204,45 +227,45 @@
             <div class="location-grid">
                 <div class="location-content">
                     <span class="section-label">Location</span>
-                    <h2>Close to Everything,<br>Far from the Noise</h2>
-                    <p>Fjordhjem sits in that perfect sweet spot — remote enough to feel like an escape, close enough that you're never more than 10 minutes from whatever you need. Coffee run? Dinner out? Hiking trailhead? All easy.</p>
+                    <h2>Tucked Away,<br>But Not Too Far</h2>
+                    <p>The cabin feels remote but you're close to everything. Grocery stores, restaurants, trails, and beaches are all within 10-15 minutes. The best of both worlds.</p>
                     
                     <div class="location-points">
                         <div class="location-point">
                             <h3>Twanoh Falls State Park (5 min)</h3>
-                            <p>Your go-to spot. Beach access for oyster harvesting, swimming area, salmon viewing during spawning season, and forest trails through old-growth. The waterfall hike is quick and beautiful. This place becomes part of your daily routine.</p>
+                            <p>Beach access, oyster harvesting, swimming, salmon runs, and forest trails. The waterfall hike is quick and beautiful. You'll probably visit every day.</p>
                         </div>
                         
                         <div class="location-point">
                             <h3>Union & Alderbrook Resort (10 min south)</h3>
-                            <p>The charming little town of Union has that classic Hood Canal vibe. But the real gem is Alderbrook Resort — open to everyone, not just guests. Waterfront dining with killer views, craft cocktails, a spa if you're feeling fancy, and grounds worth wandering. Perfect for a nice dinner out or sunset drinks.</p>
+                            <p>Charming small town with that classic Hood Canal vibe. Alderbrook Resort (open to everyone) has waterfront dining, craft cocktails, spa treatments, and beautiful grounds. Perfect for a nice dinner out.</p>
                         </div>
                         
                         <div class="location-point">
                             <h3>Belfair (10 min north)</h3>
-                            <p>Your grocery hub. Safeway, QFC, Grocery Outlet — stock up on supplies here. Also: local restaurants, breweries, and coffee shops when you want to grab something on the go. Small town feel, everything you need.</p>
+                            <p>Grocery stores (Safeway, QFC, Grocery Outlet), local restaurants, breweries, and coffee shops. Everything you need to stock the fridge or grab food on the go.</p>
                         </div>
                         
                         <div class="location-point">
                             <h3>Lake Cushman (20 min)</h3>
-                            <p>Stunning alpine lake with campgrounds, boat launches, and swimming spots. Crystal clear water, mountain backdrop, the whole deal. Great for a day trip if you want to mix up the scenery.</p>
+                            <p>Beautiful alpine lake with campgrounds, boat launches, and swimming. Crystal clear water, mountain backdrop — makes for a great day trip.</p>
                         </div>
                         
                         <div class="location-point">
                             <h3>Mt. Ellinor Trail (30 min)</h3>
-                            <p>One of the best hikes in the Olympics. Steep? Yes. Worth it? Absolutely. Summit views stretch from Hood Canal to the Cascades on clear days. Wildflowers in summer, epic fall colors. Bring layers and start early.</p>
+                            <p>One of the best hikes in the Olympics. Steep? Yes. Worth it? Absolutely. Clear-day views stretch from Hood Canal to the Cascades. Wildflowers in summer, epic fall colors. Bring layers, start early.</p>
                         </div>
                         
                         <div class="location-point">
                             <h3>Olympic National Park (45-60 min)</h3>
-                            <p>You're right on the doorstep. Hurricane Ridge for mountain views and marmots. Staircase for riverside trails and old-growth forest. Quinault Rainforest for moss-covered everything. Olympic Hot Springs if you're feeling adventurous. Day trips for weeks.</p>
+                            <p>Multiple park entrances within reach. Hurricane Ridge for mountain views and marmots. Staircase for riverside trails and old-growth forest. Quinault for rainforest vibes. Enough day trips to keep you busy all week.</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="location-images">
-                    <img src="images/mountains-fog.jpg" alt="Morning fog over Olympic Mountains" loading="lazy">
-                    <img src="images/boat.jpg" alt="Fishing boat on Hood Canal with mountain views" loading="lazy">
+                    <img src="images/brothers-bluehour.jpg" alt="Olympic Mountains at blue hour" loading="lazy">
+                    <img src="images/brothers-sailboat-goldenhour.jpg" alt="Sailboat on Hood Canal with mountain views" loading="lazy">
                 </div>
             </div>
         </div>
@@ -253,8 +276,8 @@
         <div class="container">
             <div class="booking-content">
                 <span class="section-label light">Book Your Stay</span>
-                <h2>Come Find Your Fjordhjem</h2>
-                <p>Ready to slow down, breathe deep, and remember what cozy feels like? Check availability on Airbnb or VRBO, or drop us a line with any questions. We'd love to host you.</p>
+                <h2>Come Visit</h2>
+                <p>Check availability on Airbnb or VRBO. Questions about the cabin or area? Just reach out.</p>
                 
                 <div class="booking-buttons">
                     <a href="#" class="btn-booking airbnb" target="_blank" rel="noopener">

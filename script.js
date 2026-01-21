@@ -258,4 +258,137 @@ if ('loading' in HTMLImageElement.prototype) {
     document.body.appendChild(script);
 }
 
+// House Carousel functionality
+function initHouseCarousel() {
+    const track = document.getElementById('houseCarouselTrack');
+    const slides = document.querySelectorAll('.house-carousel-slide');
+    const prevBtn = document.querySelector('.house-carousel-prev');
+    const nextBtn = document.querySelector('.house-carousel-next');
+    const dotsContainer = document.getElementById('houseCarouselDots');
+
+    if (!track || !slides.length || !prevBtn || !nextBtn || !dotsContainer) {
+        console.error('House carousel elements not found', {
+            track: !!track,
+            slides: slides.length,
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn,
+            dotsContainer: !!dotsContainer
+        });
+        return;
+    }
+
+    console.log('House carousel initializing with', slides.length, 'slides');
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    let autoplayInterval;
+
+    // Create dots
+    slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.classList.add('house-carousel-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.house-carousel-dot');
+
+    function updateCarousel() {
+        const offset = currentIndex * 100;
+        track.style.transform = `translateX(-${offset}%)`;
+
+        // Update dots
+        dots.forEach((dot, index) => {
+            if (index === currentIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        console.log('Carousel updated to slide', currentIndex);
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        updateCarousel();
+        resetAutoplay();
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateCarousel();
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    }
+
+    function startAutoplay() {
+        autoplayInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
+
+    function resetAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', () => {
+        console.log('Next button clicked');
+        nextSlide();
+        resetAutoplay();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        console.log('Prev button clicked');
+        prevSlide();
+        resetAutoplay();
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoplay();
+    });
+
+    track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const swipeThreshold = 50;
+        if (touchStartX - touchEndX > swipeThreshold) {
+            nextSlide();
+        } else if (touchEndX - touchStartX > swipeThreshold) {
+            prevSlide();
+        }
+        startAutoplay();
+    });
+
+    // Pause autoplay on hover
+    track.parentElement.addEventListener('mouseenter', stopAutoplay);
+    track.parentElement.addEventListener('mouseleave', startAutoplay);
+
+    // Initialize
+    updateCarousel();
+    startAutoplay();
+
+    console.log('House carousel initialized successfully');
+}
+
+// Initialize carousel when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHouseCarousel);
+} else {
+    initHouseCarousel();
+}
+
 console.log('Fjordhjem site loaded successfully');

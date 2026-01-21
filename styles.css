@@ -354,6 +354,127 @@ a {
     opacity: 0.7;
 }
 
+/* House Carousel in About Section */
+.house-carousel-container {
+    position: relative;
+    width: 100%;
+}
+
+.house-carousel-track-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-dark);
+}
+
+.house-carousel-track {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.house-carousel-slide {
+    min-width: 100%;
+    max-width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-dark);
+}
+
+.house-carousel-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.house-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.house-carousel-btn:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.house-carousel-prev {
+    left: 20px;
+}
+
+.house-carousel-next {
+    right: 20px;
+}
+
+.house-carousel-btn svg {
+    color: var(--color-dark);
+}
+
+.house-carousel-dots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: var(--space-sm);
+}
+
+.house-carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(26, 35, 50, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.house-carousel-dot.active {
+    background: var(--color-dark);
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .house-carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .house-carousel-prev {
+        left: 10px;
+    }
+
+    .house-carousel-next {
+        right: 10px;
+    }
+
+    .house-carousel-dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
 /* About Section */
 .about {
     padding: var(--space-2xl) 0;
@@ -365,6 +486,21 @@ a {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-xl);
     align-items: center;
+}
+
+.about-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    display: block;
 }
 
 .about-carousel-container {
