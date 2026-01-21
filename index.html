@@ -33,7 +33,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-image">
-            <img src="images/hero.jpg" alt="Olympic Mountains rising above Hood Canal at sunset" loading="eager">
+            <img src="images/brothers-sunset.jpg" alt="Olympic Mountains rising above Hood Canal at sunset" loading="eager">
         </div>
         <div class="hero-content">
             <div class="hero-text">
@@ -59,8 +59,32 @@
     <section id="about" class="about">
         <div class="container">
             <div class="about-grid">
-                <div class="about-image">
-                    <img src="images/cabin-view.jpg" alt="Cabin overlooking Hood Canal with Olympic Mountain backdrop" loading="lazy">
+                <div class="about-carousel-container">
+                    <div class="about-carousel">
+                        <div class="carousel-slide active">
+                            <img src="images/house-front-redfin.jpg" alt="Cabin overlooking Hood Canal with Olympic Mountain backdrop" loading="lazy">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/house-back.jpg" alt="Waterside view of the property" loading="lazy">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/porch-swing-leaves.jpg" alt="Stunning mountain sunset views" loading="lazy">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="images/coffeetable-cacao-mug.jpg" alt="Hood Canal shoreline" loading="lazy">
+                        </div>
+                    </div>
+                    <button class="carousel-btn prev" aria-label="Previous image">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn next" aria-label="Next image">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="carousel-dots"></div>
                 </div>
                 <div class="about-content">
                     <span class="section-label">Your Retreat</span>
@@ -277,4 +301,11 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Fjor
+                <p>&copy; 2025 Fjordhjem. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
