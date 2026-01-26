@@ -51,5 +51,40 @@ export default defineType({
       ],
       validation: (Rule) => Rule.min(1),
     }),
+    defineField({
+      name: 'features',
+      title: 'Features Grid',
+      type: 'array',
+      description: 'Key features of the cabin (e.g., "Sleeps 6", "2 Full Baths")',
+      of: [
+        {
+          type: 'object',
+          name: 'feature',
+          title: 'Feature',
+          fields: [
+            {
+              name: 'title',
+              title: 'Feature Title',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+              description: 'e.g., "Sleeps 6", "Mountain & Water Views"',
+            },
+            {
+              name: 'description',
+              title: 'Feature Description',
+              type: 'string',
+              description: 'Short description (optional)',
+            },
+          ],
+          preview: {
+            select: {
+              title: 'title',
+              subtitle: 'description',
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.max(6),
+    }),
   ],
 })

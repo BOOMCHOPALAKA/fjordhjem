@@ -16,7 +16,15 @@ export default defineType({
       name: 'distance',
       title: 'Distance',
       type: 'string',
-      description: 'Distance from the cabin (e.g., "15 min drive")',
+      description: 'Distance from the cabin (e.g., "5 min", "10 min south")',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      rows: 3,
+      description: 'Detailed description of the location and what it offers',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

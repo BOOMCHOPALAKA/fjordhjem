@@ -145,7 +145,7 @@ class SanityContentManager {
     renderAbout() {
         if (!this.content.about) return;
 
-        const { label, heading, description, photos } = this.content.about;
+        const { label, heading, description, photos, features } = this.content.about;
 
         // Update label
         const labelEl = document.querySelector('#about .section-label');
@@ -155,9 +155,23 @@ class SanityContentManager {
         const headingEl = document.querySelector('#about h2');
         if (headingEl) headingEl.innerHTML = heading.replace(/\n/g, '<br>');
 
-        // Update description (first paragraph in about-content)
-        const descEl = document.querySelector('#about .about-content p');
-        if (descEl) descEl.textContent = description;
+        // Update description - find the first paragraph that's not in features-grid
+        const aboutContent = document.querySelector('#about .about-content');
+        if (aboutContent && description) {
+            const firstP = aboutContent.querySelector('p:not(.features-grid p)');
+            if (firstP) firstP.textContent = description;
+        }
+
+        // Render features grid
+        const featuresGrid = document.querySelector('.features-grid');
+        if (featuresGrid && features && features.length > 0) {
+            featuresGrid.innerHTML = features.map(feature => `
+                <div class="feature">
+                    <h3>${feature.title}</h3>
+                    <p>${feature.description || ' '}</p>
+                </div>
+            `).join('');
+        }
 
         // Render photo carousel
         const carousel = document.querySelector('.house-carousel-track');
@@ -253,13 +267,13 @@ class SanityContentManager {
 
         // Render location points
         if (points && points.length > 0) {
-            const pointsContainer = document.querySelector('.location-list');
+            const pointsContainer = document.querySelector('.location-points');
             if (pointsContainer) {
                 pointsContainer.innerHTML = points.map(point => `
-                    <li>
-                        <span class="location-name">${point.location}</span>
-                        <span class="location-distance">${point.distance}</span>
-                    </li>
+                    <div class="location-point">
+                        <h3>${point.location} (${point.distance})</h3>
+                        <p>${point.description || ''}</p>
+                    </div>
                 `).join('');
             }
         }
