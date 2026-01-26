@@ -74,14 +74,22 @@ const locationPoints = [
   },
 ]
 
+// About section description (both paragraphs)
+const aboutDescription = `Fjordhjem (Norwegian for "Fjord Home") sits 300 feet above Hood Canal (which is, in fact, a fjord!) with Olympic Mountain views that'll make you want to stay on the deck all day. It's the kind of place where your only agenda is coffee in the morning, maybe a hike if you feel like it, and definitely some time around the fire pit at night.
+
+The cabin sleeps 7 with two bedrooms, a pull-out sofa, and two full bathrooms. Fully stocked kitchen, lots of blankets, and everything you need to either adventure hard or do absolutely nothing. Your call.`
+
 async function migrate() {
   try {
     console.log('Starting migration...')
 
-    // 1. Update About section with features
-    console.log('Adding features to About section...')
+    // 1. Update About section with features and description
+    console.log('Adding features and description to About section...')
     const about = await client.patch('about')
-      .set({features: aboutFeatures})
+      .set({
+        features: aboutFeatures,
+        description: aboutDescription,
+      })
       .commit()
     console.log('✓ Updated About section')
 

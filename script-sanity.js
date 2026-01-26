@@ -155,11 +155,34 @@ class SanityContentManager {
         const headingEl = document.querySelector('#about h2');
         if (headingEl) headingEl.innerHTML = heading.replace(/\n/g, '<br>');
 
-        // Update description - find the first paragraph that's not in features-grid
+        // Update description - remove ALL hardcoded paragraphs and create from Sanity
         const aboutContent = document.querySelector('#about .about-content');
         if (aboutContent && description) {
-            const firstP = aboutContent.querySelector('p:not(.features-grid p)');
-            if (firstP) firstP.textContent = description;
+            // Find the h2 element and features-grid
+            const h2 = aboutContent.querySelector('h2');
+            const featuresGrid = aboutContent.querySelector('.features-grid');
+
+            if (h2 && featuresGrid) {
+                // Remove all <p> elements between h2 and features-grid
+                let currentElement = h2.nextElementSibling;
+                while (currentElement && currentElement !== featuresGrid) {
+                    const nextElement = currentElement.nextElementSibling;
+                    if (currentElement.tagName === 'P') {
+                        currentElement.remove();
+                    }
+                    currentElement = nextElement;
+                }
+
+                // Split description by double newlines to create separate paragraphs
+                const paragraphs = description.split('\n\n').filter(p => p.trim());
+
+                // Insert new paragraphs after h2
+                paragraphs.forEach((paragraphText) => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraphText.trim();
+                    featuresGrid.parentNode.insertBefore(p, featuresGrid);
+                });
+            }
         }
 
         // Render features grid

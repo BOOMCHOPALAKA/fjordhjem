@@ -23,7 +23,8 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      description: 'Main description text',
+      rows: 6,
+      description: 'Main description text. Use double line breaks (press Enter twice) to create separate paragraphs.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
