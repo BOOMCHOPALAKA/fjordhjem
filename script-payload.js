@@ -1,12 +1,94 @@
 // ============================================
-// CONTENT MANAGEMENT SYSTEM
-// Load content from YAML files and populate HTML
+// CONTENT MANAGEMENT SYSTEM - PAYLOAD CMS
+// Load content from Payload CMS API
 // ============================================
 
 const ContentLoader = {
     content: {},
+    API_URL: 'http://localhost:3001/api', // Update this for production
 
-    // Load a YAML file and parse it
+    // Fetch data from Payload API
+    async fetchFromAPI(endpoint) {
+        try {
+            const response = await fetch(`${this.API_URL}/${endpoint}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(`Error fetching ${endpoint}:`, error);
+            return null;
+        }
+    },
+
+    // Get media URL from Payload
+    getMediaUrl(mediaId) {
+        if (!mediaId) return '';
+        // If it's already a full URL, return it
+        if (typeof mediaId === 'string' && mediaId.startsWith('http')) {
+            return mediaId;
+        }
+        // If it's a media object with url property (Payload v2 returns full URL)
+        if (typeof mediaId === 'object' && mediaId.url) {
+            // Check if URL is already complete
+            if (mediaId.url.startsWith('http')) {
+                return mediaId.url;
+            }
+            // Otherwise prepend the base URL
+            return `${this.API_URL.replace('/api', '')}${mediaId.url}`;
+        }
+        // Otherwise construct the URL
+        return `${this.API_URL}/media/file/${mediaId}`;
+    },
+
+    // Load all content from Payload API
+    async loadAllContent() {
+        // Load hero (single doc - get first item)
+        const heroData = await this.fetchFromAPI('hero');
+        this.content.hero = heroData?.docs?.[0] || null;
+
+        // Load about (single doc - get first item)
+        const aboutData = await this.fetchFromAPI('about');
+        this.content.about = aboutData?.docs?.[0] || null;
+
+        // Load experience section headers (global)
+        const experienceSectionData = await this.fetchFromAPI('globals/experience-section');
+        const experienceData = await this.fetchFromAPI('experience-cards');
+        if (experienceData?.docs) {
+            this.content.experience = {
+                label: experienceSectionData?.label || 'The Experience',
+                heading: experienceSectionData?.heading || 'Do Everything\nOr Do Nothing',
+                cards: experienceData.docs.sort((a, b) => a.order - b.order)
+            };
+        }
+
+        // Load location section headers (global)
+        const locationSectionData = await this.fetchFromAPI('globals/location-section');
+        const locationData = await this.fetchFromAPI('location-points');
+        if (locationData?.docs) {
+            this.content.location = {
+                label: locationSectionData?.label || 'Location',
+                heading: locationSectionData?.heading || 'Tucked Away,\nBut Not Too Far',
+                intro: locationSectionData?.intro || 'The cabin feels remote but you\'re close to everything. Grocery stores, restaurants, trails, and beaches are all within 10-15 minutes. The best of both worlds.',
+                points: locationData.docs.sort((a, b) => a.order - b.order),
+                images: [
+                    { image: 'images/view/brothers-bluehour.jpg', alt: 'Olympic Mountains at blue hour' },
+                    { image: 'images/view/brothers-sailboat-goldenhour.jpg', alt: 'Sailboat on Hood Canal with mountain views' }
+                ]
+            };
+        }
+
+        // Load booking (single doc - get first item)
+        const bookingData = await this.fetchFromAPI('booking');
+        this.content.booking = bookingData?.docs?.[0] || null;
+
+        // Load carousels from YAML (these aren't in Payload yet)
+        this.content.banner_carousel = await this.loadYAML('banner-carousel.yml');
+        this.content.house_carousel = await this.loadYAML('house-carousel.yml');
+        this.content.gallery = await this.loadYAML('gallery.yml');
+
+        return this.content;
+    },
+
+    // Fallback to YAML for content not yet in Payload
     async loadYAML(filename) {
         try {
             const response = await fetch(`content/${filename}`);
@@ -16,27 +98,6 @@ const ContentLoader = {
             console.error(`Error loading ${filename}:`, error);
             return null;
         }
-    },
-
-    // Load all content files
-    async loadAllContent() {
-        const files = [
-            'hero.yml',
-            'banner-carousel.yml',
-            'about.yml',
-            'house-carousel.yml',
-            'experience.yml',
-            'gallery.yml',
-            'location.yml',
-            'booking.yml'
-        ];
-
-        for (const file of files) {
-            const key = file.replace('.yml', '').replace(/-/g, '_');
-            this.content[key] = await this.loadYAML(file);
-        }
-
-        return this.content;
     },
 
     // Initialize all content
@@ -58,7 +119,14 @@ const ContentLoader = {
 
         document.querySelector('.hero-title').innerHTML = data.title;
         document.querySelector('.hero-subtitle').textContent = data.subtitle;
-        document.querySelector('.hero-image img').src = data.heroImage;
+
+        // Handle Payload media URL
+        const heroImage = data.heroImage;
+        if (heroImage) {
+            const imageUrl = this.getMediaUrl(heroImage);
+            document.querySelector('.hero-image img').src = imageUrl;
+        }
+
         document.querySelector('.hero-buttons .btn-primary').textContent = data.primaryButton;
         document.querySelector('.hero-buttons .btn-secondary').textContent = data.secondaryButton;
     },
@@ -104,7 +172,7 @@ const ContentLoader = {
         const aboutSection = document.querySelector('#about');
         const sectionLabel = aboutSection.querySelector('.section-label');
         const heading = aboutSection.querySelector('h2');
-        const paragraphs = aboutSection.querySelectorAll('.about-text p');
+        const paragraphs = aboutSection.querySelectorAll('.about-content p');
 
         if (sectionLabel) sectionLabel.textContent = data.label;
         if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
@@ -112,15 +180,15 @@ const ContentLoader = {
         if (paragraphs[1]) paragraphs[1].textContent = data.paragraph2;
 
         // Update features
-        const featuresGrid = aboutSection.querySelector('.about-features');
+        const featuresGrid = aboutSection.querySelector('.features-grid');
         if (featuresGrid && data.features) {
             featuresGrid.innerHTML = '';
             data.features.forEach(feature => {
                 const featureDiv = document.createElement('div');
-                featureDiv.className = 'feature-item';
+                featureDiv.className = 'feature';
                 featureDiv.innerHTML = `
                     <h3>${feature.title}</h3>
-                    <p>${feature.description}</p>
+                    <p>${feature.description || ''}</p>
                 `;
                 featuresGrid.appendChild(featureDiv);
             });
@@ -166,9 +234,13 @@ const ContentLoader = {
                 const isReverse = index % 2 === 1;
                 const cardDiv = document.createElement('div');
                 cardDiv.className = `experience-card${isReverse ? ' reverse' : ''}`;
+
+                // Handle Payload media URL
+                const imageUrl = this.getMediaUrl(card.image);
+
                 cardDiv.innerHTML = `
                     <div class="experience-image">
-                        <img src="${card.image}" alt="${card.title}" loading="lazy">
+                        <img src="${imageUrl}" alt="${card.title}" loading="lazy">
                     </div>
                     <div class="experience-text">
                         <h3>${card.title}</h3>
@@ -250,19 +322,19 @@ const ContentLoader = {
         const section = document.querySelector('#book');
         const sectionLabel = section.querySelector('.section-label');
         const heading = section.querySelector('h2');
-        const description = section.querySelector('.booking-text > p');
+        const description = section.querySelector('.booking-content > p');
 
         if (sectionLabel) sectionLabel.textContent = data.label;
         if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
         if (description) description.textContent = data.description;
 
-        const airbnbLink = section.querySelector('.booking-buttons .btn-primary:first-child');
-        const vrboLink = section.querySelector('.booking-buttons .btn-primary:last-child');
+        const airbnbLink = section.querySelector('.btn-booking.airbnb');
+        const vrboLink = section.querySelector('.btn-booking.vrbo');
 
         if (airbnbLink && data.airbnbUrl) airbnbLink.href = data.airbnbUrl;
         if (vrboLink && data.vrboUrl) vrboLink.href = data.vrboUrl;
 
-        const contactEmail = section.querySelector('.contact-info a[href^="mailto:"]');
+        const contactEmail = section.querySelector('.contact-info a.contact-link');
         if (contactEmail && data.contactEmail) {
             contactEmail.href = `mailto:${data.contactEmail}`;
             contactEmail.textContent = data.contactEmail;
@@ -270,13 +342,11 @@ const ContentLoader = {
     }
 };
 
-// Initialize content loading when DOM is ready (only if not disabled)
-if (!window.DISABLE_CONTENT_LOADER) {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => ContentLoader.init());
-    } else {
-        ContentLoader.init();
-    }
+// Initialize content loading when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ContentLoader.init());
+} else {
+    ContentLoader.init();
 }
 
 // ============================================
@@ -291,12 +361,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (target) {
             const navHeight = document.querySelector('.nav').offsetHeight;
             const targetPosition = target.offsetTop - navHeight;
-            
+
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
             });
-            
+
             // Close mobile menu if open
             closeMobileMenu();
         }
@@ -325,13 +395,13 @@ const nav = document.querySelector('.nav');
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll > 100) {
         nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
     } else {
         nav.style.boxShadow = 'none';
     }
-    
+
     lastScroll = currentScroll;
 });
 
@@ -363,7 +433,7 @@ animateElements.forEach(el => {
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     const heroImage = document.querySelector('.hero-image img');
-    
+
     if (heroImage && scrolled < window.innerHeight) {
         heroImage.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 + scrolled * 0.0001})`;
     }
@@ -381,12 +451,12 @@ galleryItems.forEach(img => {
                 <button class="lightbox-close">&times;</button>
             </div>
         `;
-        
+
         document.body.appendChild(lightbox);
         document.body.style.overflow = 'hidden';
-        
+
         setTimeout(() => lightbox.classList.add('active'), 10);
-        
+
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
                 lightbox.classList.remove('active');
@@ -416,25 +486,25 @@ lightboxStyles.textContent = `
         opacity: 0;
         transition: opacity 0.3s ease;
     }
-    
+
     .lightbox.active {
         opacity: 1;
     }
-    
+
     .lightbox-content {
         position: relative;
         max-width: 90vw;
         max-height: 90vh;
         animation: zoomIn 0.3s ease;
     }
-    
+
     .lightbox-content img {
         max-width: 100%;
         max-height: 90vh;
         object-fit: contain;
         border-radius: 4px;
     }
-    
+
     .lightbox-close {
         position: absolute;
         top: -40px;
@@ -448,11 +518,11 @@ lightboxStyles.textContent = `
         line-height: 1;
         transition: opacity 0.3s ease;
     }
-    
+
     .lightbox-close:hover {
         opacity: 0.7;
     }
-    
+
     @keyframes zoomIn {
         from {
             transform: scale(0.9);
@@ -463,13 +533,13 @@ lightboxStyles.textContent = `
             opacity: 1;
         }
     }
-    
+
     @media (max-width: 768px) {
         .lightbox-content {
             max-width: 95vw;
             max-height: 95vh;
         }
-        
+
         .lightbox-close {
             top: -50px;
             font-size: 2rem;
@@ -498,31 +568,31 @@ mobileMenuStyles.textContent = `
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
             transition: right 0.3s ease;
         }
-        
+
         .nav-links.active {
             right: 0;
         }
-        
+
         .nav-links a {
             font-size: 1.125rem;
             width: 100%;
             padding: 0.5rem 0;
         }
-        
+
         .nav-links .btn-primary {
             width: 100%;
             justify-content: center;
             margin-top: 1rem;
         }
-        
+
         .menu-toggle.active span:nth-child(1) {
             transform: rotate(45deg) translate(7px, 7px);
         }
-        
+
         .menu-toggle.active span:nth-child(2) {
             opacity: 0;
         }
-        
+
         .menu-toggle.active span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -7px);
         }
@@ -552,17 +622,9 @@ function initHouseCarousel() {
     const dotsContainer = document.getElementById('houseCarouselDots');
 
     if (!track || !slides.length || !prevBtn || !nextBtn || !dotsContainer) {
-        console.error('House carousel elements not found', {
-            track: !!track,
-            slides: slides.length,
-            prevBtn: !!prevBtn,
-            nextBtn: !!nextBtn,
-            dotsContainer: !!dotsContainer
-        });
+        console.error('House carousel elements not found');
         return;
     }
-
-    console.log('House carousel initializing with', slides.length, 'slides');
 
     let currentIndex = 0;
     const totalSlides = slides.length;
@@ -592,8 +654,6 @@ function initHouseCarousel() {
                 dot.classList.remove('active');
             }
         });
-
-        console.log('Carousel updated to slide', currentIndex);
     }
 
     function goToSlide(index) {
@@ -627,13 +687,11 @@ function initHouseCarousel() {
 
     // Event listeners
     nextBtn.addEventListener('click', () => {
-        console.log('Next button clicked');
         nextSlide();
         resetAutoplay();
     });
 
     prevBtn.addEventListener('click', () => {
-        console.log('Prev button clicked');
         prevSlide();
         resetAutoplay();
     });
@@ -665,8 +723,6 @@ function initHouseCarousel() {
     // Initialize
     updateCarousel();
     startAutoplay();
-
-    console.log('House carousel initialized successfully');
 }
 
 // Initialize carousel when DOM is loaded
@@ -692,8 +748,6 @@ function initBannerCarousel() {
         slide => !slide.hasAttribute('aria-hidden')
     );
     const totalOriginalSlides = originalSlides.length;
-
-    console.log('Banner carousel initializing with', totalOriginalSlides, 'unique slides');
 
     // Create indicators for original slides only
     originalSlides.forEach((_, index) => {
@@ -747,94 +801,67 @@ function initBannerCarousel() {
         isPageVisible = !document.hidden;
     });
 
-    // Touch/Mouse start
+    // Touch/Mouse handlers...
     function touchStart(event) {
         isDragging = true;
-
         if (event.type === 'mousedown') {
             startPos = event.clientX;
             bannerSection.style.cursor = 'grabbing';
         } else {
             startPos = event.touches[0].clientX;
         }
-
         dragStartTranslate = currentTranslate;
     }
 
-    // Touch/Mouse move
     function touchMove(event) {
         if (!isDragging) return;
-
         const currentPosition = event.type === 'mousemove'
             ? event.clientX
             : event.touches[0].clientX;
-
         const diff = currentPosition - startPos;
         currentTranslate = dragStartTranslate + diff;
-
-        // Update position immediately during drag
         track.style.transform = `translateX(${currentTranslate}px)`;
     }
 
-    // Touch/Mouse end
     function touchEnd() {
         if (!isDragging) return;
-
         isDragging = false;
         bannerSection.style.cursor = 'grab';
-
-        // Check if we need to loop around
         const totalWidth = getTotalWidth();
         if (Math.abs(currentTranslate) >= totalWidth) {
             currentTranslate = currentTranslate % totalWidth;
         }
-        // Handle positive scrolling (scrolling right)
         if (currentTranslate > 0) {
             currentTranslate = -totalWidth + (currentTranslate % totalWidth);
         }
     }
 
-    // Desktop mouse events
+    // Event listeners
     bannerSection.addEventListener('mousedown', touchStart);
     bannerSection.addEventListener('mousemove', touchMove);
     bannerSection.addEventListener('mouseup', touchEnd);
     bannerSection.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            touchEnd();
-        }
+        if (isDragging) touchEnd();
     });
-
-    // Mobile touch events
     bannerSection.addEventListener('touchstart', touchStart, { passive: true });
     bannerSection.addEventListener('touchmove', touchMove, { passive: true });
     bannerSection.addEventListener('touchend', touchEnd, { passive: true });
-
-    // Prevent context menu on long press
-    bannerSection.addEventListener('contextmenu', (e) => {
-        if (isDragging) {
-            e.preventDefault();
-        }
-    });
-
-    // Set cursor style
     bannerSection.style.cursor = 'grab';
 
     // Adjust scroll speed based on screen size
     function updateScrollSpeed() {
         const width = window.innerWidth;
         if (width <= 480) {
-            autoScrollSpeed = 0.8; // Faster on small screens
+            autoScrollSpeed = 0.8;
         } else if (width <= 768) {
-            autoScrollSpeed = 0.65; // Medium speed on tablets
+            autoScrollSpeed = 0.65;
         } else {
-            autoScrollSpeed = 0.5; // Normal speed on desktop
+            autoScrollSpeed = 0.5;
         }
     }
 
     updateScrollSpeed();
     window.addEventListener('resize', updateScrollSpeed);
-
-    console.log('Banner carousel initialized successfully with smooth continuous scroll and drag support');
 }
 
 // Initialize banner carousel when DOM is loaded
@@ -844,4 +871,4 @@ if (document.readyState === 'loading') {
     initBannerCarousel();
 }
 
-console.log('Fjordhjem site loaded successfully');
+console.log('Fjordhjem site loaded successfully with Payload CMS');

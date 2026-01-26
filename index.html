@@ -9,6 +9,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Smooth loading transition for Sanity content */
+        body.sanity-loading .hero-title,
+        body.sanity-loading .hero-subtitle,
+        body.sanity-loading #about h2,
+        body.sanity-loading #experience h2,
+        body.sanity-loading #location h2,
+        body.sanity-loading #book h2 {
+            opacity: 0.5;
+        }
+
+        /* Make hero taller on mobile to show more vertical content */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 100vh;
+                height: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -18,8 +37,8 @@
             <div class="nav-links">
                 <a href="#about">About</a>
                 <a href="#experience">Experience</a>
-                <a href="#gallery">Gallery</a>
                 <a href="#location">Location</a>
+                <a href="#gallery">Gallery</a>
                 <a href="#book" class="btn-primary">Book Now</a>
             </div>
             <button class="menu-toggle" aria-label="Toggle menu">
@@ -33,7 +52,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-image">
-            <img src="images/view/brothers-sunset.jpg" alt="Olympic Mountains rising above Hood Canal at sunset" loading="eager">
+            <img src="" alt="Hood Canal cabin view" loading="eager" style="opacity: 0; transition: opacity 0.3s;">
         </div>
         <div class="hero-content">
             <div class="hero-text">
@@ -216,37 +235,6 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery">
-        <div class="container-wide">
-            <div class="section-header centered">
-                <span class="section-label">Gallery</span>
-                <h2>See For<br>Yourself</h2>
-            </div>
-
-            <div class="gallery-grid">
-                <div class="gallery-item large">
-                    <img src="images/view/brothers-sunset.jpg" alt="Olympic Mountains at sunset over Hood Canal" loading="lazy">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/nearby/union-dock-boat.jpg" alt="Boat at Union dock with mountain backdrop" loading="lazy">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/view/twanoh-sunset-clouds.jpg" alt="Sunset clouds over Hood Canal" loading="lazy">
-                </div>
-                <div class="gallery-item tall">
-                    <img src="images/exterior/porch-swing-leaves.jpg" alt="Cozy porch swing view" loading="lazy">
-                </div>
-                <div class="gallery-item wide">
-                    <img src="images/view/across-water-mountain-trees-houses.jpg" alt="Hood Canal waterfront with mountains" loading="lazy">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/nearby/dock-sunset-cloud-twanoh.jpg" alt="Dock at Twanoh at sunset" loading="lazy">
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Location Section -->
     <section id="location" class="location">
         <div class="container">
@@ -292,6 +280,37 @@
                 <div class="location-images">
                     <img src="images/view/brothers-bluehour.jpg" alt="Olympic Mountains at blue hour" loading="lazy">
                     <img src="images/view/brothers-sailboat-goldenhour.jpg" alt="Sailboat on Hood Canal with mountain views" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container-wide">
+            <div class="section-header centered">
+                <span class="section-label">Gallery</span>
+                <h2>See For<br>Yourself</h2>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item large">
+                    <img src="images/view/brothers-sunset.jpg" alt="Olympic Mountains at sunset over Hood Canal" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/nearby/union-dock-boat.jpg" alt="Boat at Union dock with mountain backdrop" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/view/twanoh-sunset-clouds.jpg" alt="Sunset clouds over Hood Canal" loading="lazy">
+                </div>
+                <div class="gallery-item tall">
+                    <img src="images/exterior/porch-swing-leaves.jpg" alt="Cozy porch swing view" loading="lazy">
+                </div>
+                <div class="gallery-item wide">
+                    <img src="images/view/across-water-mountain-trees-houses.jpg" alt="Hood Canal waterfront with mountains" loading="lazy">
+                </div>
+                <div class="gallery-item">
+                    <img src="images/nearby/dock-sunset-cloud-twanoh.jpg" alt="Dock at Twanoh at sunset" loading="lazy">
                 </div>
             </div>
         </div>
@@ -343,8 +362,8 @@
                 <div class="footer-links">
                     <a href="#about">About</a>
                     <a href="#experience">Experience</a>
-                    <a href="#gallery">Gallery</a>
                     <a href="#location">Location</a>
+                    <a href="#gallery">Gallery</a>
                     <a href="#book">Book</a>
                 </div>
             </div>
@@ -355,8 +374,14 @@
         </div>
     </footer>
 
-    <!-- YAML Parser Library -->
-    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <!-- Carousel and UI functionality -->
+    <script>
+        // Disable the ContentLoader from script.js
+        window.DISABLE_CONTENT_LOADER = true;
+    </script>
     <script src="script.js"></script>
+
+    <!-- Sanity Content Manager -->
+    <script type="module" src="script-sanity.js"></script>
 </body>
 </html>
