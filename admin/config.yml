@@ -2,8 +2,8 @@ backend:
   name: github
   repo: BOOMCHOPALAKA/fjordhjem
   branch: main
-  base_url: https://fjordhjem.pages.dev
-  auth_endpoint: /api/auth
+  base_url: https://github-oauth.netlify.app
+  auth_endpoint: /auth
 
 media_folder: "images"
 public_folder: "images"
