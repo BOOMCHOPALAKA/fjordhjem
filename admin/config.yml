@@ -3,9 +3,6 @@ backend:
   repo: BOOMCHOPALAKA/fjordhjem
   branch: main
 
-# Enable local development mode
-local_backend: true
-
 media_folder: "images"
 public_folder: "images"
 
