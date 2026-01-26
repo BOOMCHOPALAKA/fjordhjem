@@ -14,3 +14,8 @@ points:
     description: "One of the best hikes in the Olympics. Steep? Yes. Worth it? Absolutely. Clear-day views stretch from Hood Canal to the Cascades. Wildflowers in summer, epic fall colors. Bring layers, start early."
   - title: "Olympic National Park (45-60 min)"
     description: "Multiple park entrances within reach. Hurricane Ridge for mountain views and marmots. Staircase for riverside trails and old-growth forest. Quinault for rainforest vibes. Enough day trips to keep you busy all week."
+images:
+  - image: "images/view/brothers-bluehour.jpg"
+    alt: "Olympic Mountains at blue hour"
+  - image: "images/view/brothers-sailboat-goldenhour.jpg"
+    alt: "Sailboat on Hood Canal with mountain views"

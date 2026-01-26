@@ -3,6 +3,9 @@ backend:
   repo: BOOMCHOPALAKA/fjordhjem
   branch: main
 
+# Enable local development mode
+local_backend: true
+
 media_folder: "images"
 public_folder: "images"
 
@@ -62,6 +65,12 @@ collections:
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Description", name: "description", widget: "text"}
+          - label: "Location Images"
+            name: "images"
+            widget: "list"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Alt Text", name: "alt", widget: "string"}
 
       - label: "Booking Section"
         name: "booking"
@@ -73,3 +82,43 @@ collections:
           - {label: "Airbnb URL", name: "airbnbUrl", widget: "string", required: false}
           - {label: "VRBO URL", name: "vrboUrl", widget: "string", required: false}
           - {label: "Contact Email", name: "contactEmail", widget: "string"}
+
+      - label: "Banner Carousel"
+        name: "bannerCarousel"
+        file: "content/banner-carousel.yml"
+        fields:
+          - label: "Carousel Slides"
+            name: "slides"
+            widget: "list"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Alt Text", name: "alt", widget: "string"}
+
+      - label: "House Carousel (About Section)"
+        name: "houseCarousel"
+        file: "content/house-carousel.yml"
+        fields:
+          - label: "Carousel Photos"
+            name: "photos"
+            widget: "list"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Alt Text", name: "alt", widget: "string"}
+
+      - label: "Gallery Section"
+        name: "gallery"
+        file: "content/gallery.yml"
+        fields:
+          - {label: "Section Label", name: "label", widget: "string"}
+          - {label: "Heading", name: "heading", widget: "string"}
+          - label: "Gallery Images"
+            name: "images"
+            widget: "list"
+            fields:
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Alt Text", name: "alt", widget: "string"}
+              - label: "Size"
+                name: "size"
+                widget: "select"
+                options: ["normal", "large", "tall", "wide"]
+                default: "normal"
