@@ -1,3 +1,286 @@
+// ============================================
+// CONTENT MANAGEMENT SYSTEM
+// Load content from YAML files and populate HTML
+// ============================================
+
+const ContentLoader = {
+    content: {},
+
+    // Load a YAML file and parse it
+    async loadYAML(filename) {
+        try {
+            const response = await fetch(`content/${filename}`);
+            const text = await response.text();
+            return jsyaml.load(text);
+        } catch (error) {
+            console.error(`Error loading ${filename}:`, error);
+            return null;
+        }
+    },
+
+    // Load all content files
+    async loadAllContent() {
+        const files = [
+            'hero.yml',
+            'banner-carousel.yml',
+            'about.yml',
+            'house-carousel.yml',
+            'experience.yml',
+            'gallery.yml',
+            'location.yml',
+            'booking.yml'
+        ];
+
+        for (const file of files) {
+            const key = file.replace('.yml', '').replace(/-/g, '_');
+            this.content[key] = await this.loadYAML(file);
+        }
+
+        return this.content;
+    },
+
+    // Initialize all content
+    async init() {
+        await this.loadAllContent();
+        this.populateHero();
+        this.populateBannerCarousel();
+        this.populateAbout();
+        this.populateHouseCarousel();
+        this.populateExperience();
+        this.populateGallery();
+        this.populateLocation();
+        this.populateBooking();
+    },
+
+    populateHero() {
+        const data = this.content.hero;
+        if (!data) return;
+
+        document.querySelector('.hero-title').innerHTML = data.title;
+        document.querySelector('.hero-subtitle').textContent = data.subtitle;
+        document.querySelector('.hero-image img').src = data.heroImage;
+        document.querySelector('.hero-buttons .btn-primary').textContent = data.primaryButton;
+        document.querySelector('.hero-buttons .btn-secondary').textContent = data.secondaryButton;
+    },
+
+    populateBannerCarousel() {
+        const data = this.content.banner_carousel;
+        if (!data || !data.slides) return;
+
+        const track = document.getElementById('bannerCarouselTrack');
+        if (!track) return;
+
+        // Clear existing slides
+        track.innerHTML = '';
+
+        // Add original slides
+        data.slides.forEach(slide => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'banner-carousel-slide';
+            slideDiv.innerHTML = `<img src="${slide.image}" alt="${slide.alt}" loading="lazy">`;
+            track.appendChild(slideDiv);
+        });
+
+        // Add duplicate slides for seamless loop
+        data.slides.forEach(slide => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'banner-carousel-slide';
+            slideDiv.setAttribute('aria-hidden', 'true');
+            slideDiv.innerHTML = `<img src="${slide.image}" alt="" loading="lazy">`;
+            track.appendChild(slideDiv);
+        });
+
+        // Reinitialize banner carousel if function exists
+        if (typeof initBannerCarousel === 'function') {
+            initBannerCarousel();
+        }
+    },
+
+    populateAbout() {
+        const data = this.content.about;
+        if (!data) return;
+
+        // Update text content
+        const aboutSection = document.querySelector('#about');
+        const sectionLabel = aboutSection.querySelector('.section-label');
+        const heading = aboutSection.querySelector('h2');
+        const paragraphs = aboutSection.querySelectorAll('.about-text p');
+
+        if (sectionLabel) sectionLabel.textContent = data.label;
+        if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
+        if (paragraphs[0]) paragraphs[0].textContent = data.paragraph1;
+        if (paragraphs[1]) paragraphs[1].textContent = data.paragraph2;
+
+        // Update features
+        const featuresGrid = aboutSection.querySelector('.about-features');
+        if (featuresGrid && data.features) {
+            featuresGrid.innerHTML = '';
+            data.features.forEach(feature => {
+                const featureDiv = document.createElement('div');
+                featureDiv.className = 'feature-item';
+                featureDiv.innerHTML = `
+                    <h3>${feature.title}</h3>
+                    <p>${feature.description}</p>
+                `;
+                featuresGrid.appendChild(featureDiv);
+            });
+        }
+    },
+
+    populateHouseCarousel() {
+        const data = this.content.house_carousel;
+        if (!data || !data.photos) return;
+
+        const track = document.getElementById('houseCarouselTrack');
+        if (!track) return;
+
+        track.innerHTML = '';
+        data.photos.forEach(photo => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'house-carousel-slide';
+            slideDiv.innerHTML = `<img src="${photo.image}" alt="${photo.alt}">`;
+            track.appendChild(slideDiv);
+        });
+
+        // Reinitialize house carousel if function exists
+        if (typeof initHouseCarousel === 'function') {
+            initHouseCarousel();
+        }
+    },
+
+    populateExperience() {
+        const data = this.content.experience;
+        if (!data) return;
+
+        const section = document.querySelector('#experience');
+        const sectionLabel = section.querySelector('.section-label');
+        const heading = section.querySelector('h2');
+
+        if (sectionLabel) sectionLabel.textContent = data.label;
+        if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
+
+        const grid = section.querySelector('.experience-grid');
+        if (grid && data.cards) {
+            grid.innerHTML = '';
+            data.cards.forEach((card, index) => {
+                const isReverse = index % 2 === 1;
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `experience-card${isReverse ? ' reverse' : ''}`;
+                cardDiv.innerHTML = `
+                    <div class="experience-image">
+                        <img src="${card.image}" alt="${card.title}" loading="lazy">
+                    </div>
+                    <div class="experience-text">
+                        <h3>${card.title}</h3>
+                        <p>${card.description}</p>
+                    </div>
+                `;
+                grid.appendChild(cardDiv);
+            });
+        }
+    },
+
+    populateGallery() {
+        const data = this.content.gallery;
+        if (!data) return;
+
+        const section = document.querySelector('#gallery');
+        const sectionLabel = section.querySelector('.section-label');
+        const heading = section.querySelector('h2');
+
+        if (sectionLabel) sectionLabel.textContent = data.label;
+        if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
+
+        const grid = section.querySelector('.gallery-grid');
+        if (grid && data.images) {
+            grid.innerHTML = '';
+            data.images.forEach(item => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = `gallery-item${item.size !== 'normal' ? ' ' + item.size : ''}`;
+                imageDiv.innerHTML = `<img src="${item.image}" alt="${item.alt}" loading="lazy">`;
+                grid.appendChild(imageDiv);
+            });
+        }
+    },
+
+    populateLocation() {
+        const data = this.content.location;
+        if (!data) return;
+
+        const section = document.querySelector('#location');
+        const sectionLabel = section.querySelector('.section-label');
+        const heading = section.querySelector('h2');
+        const intro = section.querySelector('.location-content > p');
+
+        if (sectionLabel) sectionLabel.textContent = data.label;
+        if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
+        if (intro) intro.textContent = data.intro;
+
+        const pointsContainer = section.querySelector('.location-points');
+        if (pointsContainer && data.points) {
+            pointsContainer.innerHTML = '';
+            data.points.forEach(point => {
+                const pointDiv = document.createElement('div');
+                pointDiv.className = 'location-point';
+                pointDiv.innerHTML = `
+                    <h3>${point.title}</h3>
+                    <p>${point.description}</p>
+                `;
+                pointsContainer.appendChild(pointDiv);
+            });
+        }
+
+        const imagesContainer = section.querySelector('.location-images');
+        if (imagesContainer && data.images) {
+            imagesContainer.innerHTML = '';
+            data.images.forEach(image => {
+                const img = document.createElement('img');
+                img.src = image.image;
+                img.alt = image.alt;
+                img.loading = 'lazy';
+                imagesContainer.appendChild(img);
+            });
+        }
+    },
+
+    populateBooking() {
+        const data = this.content.booking;
+        if (!data) return;
+
+        const section = document.querySelector('#book');
+        const sectionLabel = section.querySelector('.section-label');
+        const heading = section.querySelector('h2');
+        const description = section.querySelector('.booking-text > p');
+
+        if (sectionLabel) sectionLabel.textContent = data.label;
+        if (heading) heading.innerHTML = data.heading.replace(/\n/g, '<br>');
+        if (description) description.textContent = data.description;
+
+        const airbnbLink = section.querySelector('.booking-buttons .btn-primary:first-child');
+        const vrboLink = section.querySelector('.booking-buttons .btn-primary:last-child');
+
+        if (airbnbLink && data.airbnbUrl) airbnbLink.href = data.airbnbUrl;
+        if (vrboLink && data.vrboUrl) vrboLink.href = data.vrboUrl;
+
+        const contactEmail = section.querySelector('.contact-info a[href^="mailto:"]');
+        if (contactEmail && data.contactEmail) {
+            contactEmail.href = `mailto:${data.contactEmail}`;
+            contactEmail.textContent = data.contactEmail;
+        }
+    }
+};
+
+// Initialize content loading when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ContentLoader.init());
+} else {
+    ContentLoader.init();
+}
+
+// ============================================
+// EXISTING SCRIPTS
+// ============================================
+
 // Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
