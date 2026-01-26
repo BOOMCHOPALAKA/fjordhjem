@@ -1,0 +1,75 @@
+backend:
+  name: github
+  repo: BOOMCHOPALAKA/fjordhjem
+  branch: main
+
+media_folder: "images"
+public_folder: "images"
+
+collections:
+  - name: "content"
+    label: "Site Content"
+    files:
+      - label: "Hero Section"
+        name: "hero"
+        file: "content/hero.yml"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Subtitle", name: "subtitle", widget: "text"}
+          - {label: "Primary Button Text", name: "primaryButton", widget: "string"}
+          - {label: "Secondary Button Text", name: "secondaryButton", widget: "string"}
+          - {label: "Hero Image", name: "heroImage", widget: "image"}
+
+      - label: "About Section"
+        name: "about"
+        file: "content/about.yml"
+        fields:
+          - {label: "Section Label", name: "label", widget: "string"}
+          - {label: "Heading", name: "heading", widget: "string"}
+          - {label: "Paragraph 1", name: "paragraph1", widget: "text"}
+          - {label: "Paragraph 2", name: "paragraph2", widget: "text"}
+          - label: "Features"
+            name: "features"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Description", name: "description", widget: "string"}
+
+      - label: "Experience Section"
+        name: "experience"
+        file: "content/experience.yml"
+        fields:
+          - {label: "Section Label", name: "label", widget: "string"}
+          - {label: "Heading", name: "heading", widget: "string"}
+          - label: "Experience Cards"
+            name: "cards"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Description", name: "description", widget: "text"}
+              - {label: "Image", name: "image", widget: "image"}
+
+      - label: "Location Section"
+        name: "location"
+        file: "content/location.yml"
+        fields:
+          - {label: "Section Label", name: "label", widget: "string"}
+          - {label: "Heading", name: "heading", widget: "string"}
+          - {label: "Introduction", name: "intro", widget: "text"}
+          - label: "Location Points"
+            name: "points"
+            widget: "list"
+            fields:
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Description", name: "description", widget: "text"}
+
+      - label: "Booking Section"
+        name: "booking"
+        file: "content/booking.yml"
+        fields:
+          - {label: "Section Label", name: "label", widget: "string"}
+          - {label: "Heading", name: "heading", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Airbnb URL", name: "airbnbUrl", widget: "string", required: false}
+          - {label: "VRBO URL", name: "vrboUrl", widget: "string", required: false}
+          - {label: "Contact Email", name: "contactEmail", widget: "string"}

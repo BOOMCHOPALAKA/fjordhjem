@@ -391,4 +391,172 @@ if (document.readyState === 'loading') {
     initHouseCarousel();
 }
 
+// Banner Carousel functionality
+function initBannerCarousel() {
+    const track = document.getElementById('bannerCarouselTrack');
+    const indicatorsContainer = document.getElementById('bannerCarouselIndicators');
+    const bannerSection = document.querySelector('.banner-carousel');
+
+    if (!track || !indicatorsContainer || !bannerSection) {
+        console.error('Banner carousel elements not found');
+        return;
+    }
+
+    // Get only the original slides (not the duplicates)
+    const originalSlides = Array.from(document.querySelectorAll('.banner-carousel-slide')).filter(
+        slide => !slide.hasAttribute('aria-hidden')
+    );
+    const totalOriginalSlides = originalSlides.length;
+
+    console.log('Banner carousel initializing with', totalOriginalSlides, 'unique slides');
+
+    // Create indicators for original slides only
+    originalSlides.forEach((_, index) => {
+        const indicator = document.createElement('button');
+        indicator.classList.add('banner-carousel-indicator');
+        indicator.setAttribute('aria-label', `View slide ${index + 1}`);
+        indicatorsContainer.appendChild(indicator);
+    });
+
+    // Disable CSS animation - we'll handle scrolling with JavaScript
+    track.style.animation = 'none';
+
+    // State management
+    let currentTranslate = 0;
+    let isDragging = false;
+    let startPos = 0;
+    let dragStartTranslate = 0;
+    let autoScrollSpeed = 0.5; // pixels per frame
+    let isPageVisible = true;
+
+    // Calculate the total width of one set of images
+    function getTotalWidth() {
+        let width = 0;
+        originalSlides.forEach(slide => {
+            width += slide.offsetWidth + 2; // +2 for margin
+        });
+        return width;
+    }
+
+    // Auto-scroll function
+    function autoScroll() {
+        if (!isDragging && isPageVisible) {
+            currentTranslate -= autoScrollSpeed;
+
+            // Reset position when we've scrolled through half (one set of images)
+            const totalWidth = getTotalWidth();
+            if (Math.abs(currentTranslate) >= totalWidth) {
+                currentTranslate = 0;
+            }
+
+            track.style.transform = `translateX(${currentTranslate}px)`;
+        }
+        requestAnimationFrame(autoScroll);
+    }
+
+    // Start auto-scrolling
+    autoScroll();
+
+    // Pause animation when page is not visible
+    document.addEventListener('visibilitychange', () => {
+        isPageVisible = !document.hidden;
+    });
+
+    // Touch/Mouse start
+    function touchStart(event) {
+        isDragging = true;
+
+        if (event.type === 'mousedown') {
+            startPos = event.clientX;
+            bannerSection.style.cursor = 'grabbing';
+        } else {
+            startPos = event.touches[0].clientX;
+        }
+
+        dragStartTranslate = currentTranslate;
+    }
+
+    // Touch/Mouse move
+    function touchMove(event) {
+        if (!isDragging) return;
+
+        const currentPosition = event.type === 'mousemove'
+            ? event.clientX
+            : event.touches[0].clientX;
+
+        const diff = currentPosition - startPos;
+        currentTranslate = dragStartTranslate + diff;
+
+        // Update position immediately during drag
+        track.style.transform = `translateX(${currentTranslate}px)`;
+    }
+
+    // Touch/Mouse end
+    function touchEnd() {
+        if (!isDragging) return;
+
+        isDragging = false;
+        bannerSection.style.cursor = 'grab';
+
+        // Check if we need to loop around
+        const totalWidth = getTotalWidth();
+        if (Math.abs(currentTranslate) >= totalWidth) {
+            currentTranslate = currentTranslate % totalWidth;
+        }
+        // Handle positive scrolling (scrolling right)
+        if (currentTranslate > 0) {
+            currentTranslate = -totalWidth + (currentTranslate % totalWidth);
+        }
+    }
+
+    // Desktop mouse events
+    bannerSection.addEventListener('mousedown', touchStart);
+    bannerSection.addEventListener('mousemove', touchMove);
+    bannerSection.addEventListener('mouseup', touchEnd);
+    bannerSection.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            touchEnd();
+        }
+    });
+
+    // Mobile touch events
+    bannerSection.addEventListener('touchstart', touchStart, { passive: true });
+    bannerSection.addEventListener('touchmove', touchMove, { passive: true });
+    bannerSection.addEventListener('touchend', touchEnd, { passive: true });
+
+    // Prevent context menu on long press
+    bannerSection.addEventListener('contextmenu', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+        }
+    });
+
+    // Set cursor style
+    bannerSection.style.cursor = 'grab';
+
+    // Adjust scroll speed based on screen size
+    function updateScrollSpeed() {
+        const width = window.innerWidth;
+        if (width <= 480) {
+            autoScrollSpeed = 0.8; // Faster on small screens
+        } else if (width <= 768) {
+            autoScrollSpeed = 0.65; // Medium speed on tablets
+        } else {
+            autoScrollSpeed = 0.5; // Normal speed on desktop
+        }
+    }
+
+    updateScrollSpeed();
+    window.addEventListener('resize', updateScrollSpeed);
+
+    console.log('Banner carousel initialized successfully with smooth continuous scroll and drag support');
+}
+
+// Initialize banner carousel when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBannerCarousel);
+} else {
+    initBannerCarousel();
+}
+
 console.log('Fjordhjem site loaded successfully');
