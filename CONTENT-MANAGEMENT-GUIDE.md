@@ -62,12 +62,14 @@ These are the detailed attraction descriptions that appear below the intro parag
 
 | Section | Where to Edit | What You Can Change |
 |---------|--------------|---------------------|
-| **Hero** | Hero Section | Title, subtitle, background image |
+| **Hero** | Hero Section | Title, subtitle, background image, primary/secondary buttons |
+| **Banner Carousel** | Banner Carousel | Auto-scrolling banner images |
 | **About** | About Section | Label, heading, description, photos, features grid |
 | **Experience** | Experience Section + Experience Cards | Section heading + individual experience cards |
 | **Location** | Location Section + Location Points | Intro text + individual location details |
 | **Gallery** | Gallery Section | Photo collections with different sizes |
-| **Booking** | Booking Section | Label, heading, description, button text & URL |
+| **Booking** | Booking Section | Label, heading, Airbnb/VRBO buttons, contact info |
+| **Site Settings** | Site Settings | Site name (logo/footer), location, copyright |
 
 ---
 
@@ -107,16 +109,47 @@ These are the detailed attraction descriptions that appear below the intro parag
 
 ---
 
-## Recent Fixes (2026-01-26)
+## Recent Updates
 
-✅ **Added Features Grid to About Section**
-- You can now edit "Sleeps 6", "2 Full Baths", etc.
-- Located in About Section → Features Grid
+### 2026-01-26 - Complete Hardcoded Content Elimination
 
-✅ **Added Descriptions to Location Points**
-- You can now edit the full descriptions for each attraction
-- Located in Location Points → individual documents
+✅ **Hero Section Buttons**
+- Primary button (text & URL) - Default: "Check Availability" → #book
+- Secondary button (text & URL) - Default: "Come explore" → #about
 
-✅ **Migrated Existing Content**
-- All hardcoded HTML content has been migrated to Sanity
-- Everything is now editable through the Studio
+✅ **Banner Carousel (NEW)**
+- Manage all auto-scrolling banner images
+- Upload images through Media tab, add to Banner Carousel
+- **ACTION NEEDED**: Upload banner carousel images in Studio
+
+✅ **Booking Section - Dual Platform Buttons**
+- Separate Airbnb button (text & URL)
+- Separate VRBO button (text & URL)
+- Contact question text
+- Contact email address
+- **ACTION NEEDED**: Update Airbnb & VRBO URLs with your real listing links
+- **ACTION NEEDED**: Update contact email with your actual email
+
+✅ **Site Settings (NEW)**
+- Site name (appears in logo & footer)
+- Site location (footer)
+- Copyright text (footer with auto-year)
+
+✅ **About Section Features Grid**
+- Edit "Sleeps 6", "2 Full Baths", etc.
+
+✅ **Location Points Descriptions**
+- Full descriptions for each attraction
+
+✅ **About Section Description**
+- Support for multiple paragraphs (use double line breaks)
+
+---
+
+## Action Items After Deployment
+
+1. **Banner Carousel** → Upload 4-6 images for the scrolling banner
+2. **Booking Section** → Update Airbnb URL with your listing
+3. **Booking Section** → Update VRBO URL with your listing
+4. **Booking Section** → Update contact email
+5. Test all changes on production site
