@@ -21,6 +21,8 @@ class SanityContentManager {
             location: null,
             gallery: null,
             booking: null,
+            bannerCarousel: null,
+            siteSettings: null,
         };
     }
 
@@ -77,6 +79,8 @@ class SanityContentManager {
             const locationPoints = await sanityClient.fetch('*[_type == "locationPoint"] | order(order asc)');
             const gallery = await sanityClient.fetch('*[_type == "gallery"][0]');
             const booking = await sanityClient.fetch('*[_type == "booking"][0]');
+            const bannerCarousel = await sanityClient.fetch('*[_type == "bannerCarousel"][0]');
+            const siteSettings = await sanityClient.fetch('*[_type == "siteSettings"][0]');
 
             // Store in content object
             this.content.hero = hero;
@@ -91,6 +95,8 @@ class SanityContentManager {
             };
             this.content.gallery = gallery;
             this.content.booking = booking;
+            this.content.bannerCarousel = bannerCarousel;
+            this.content.siteSettings = siteSettings;
 
             console.log('Content loaded from Sanity:', this.content);
         } catch (error) {
@@ -102,7 +108,7 @@ class SanityContentManager {
     renderHero() {
         if (!this.content.hero) return;
 
-        const { title, subtitle, backgroundImage } = this.content.hero;
+        const { title, subtitle, backgroundImage, primaryButtonText, primaryButtonUrl, secondaryButtonText, secondaryButtonUrl } = this.content.hero;
 
         // Update title
         const titleEl = document.querySelector('.hero-title');
@@ -137,6 +143,23 @@ class SanityContentManager {
                     // Image already loaded, make sure it's visible
                     heroImg.style.opacity = '1';
                 }
+            }
+        }
+
+        // Update hero buttons
+        if (primaryButtonText && primaryButtonUrl) {
+            const primaryBtn = document.querySelector('.hero-buttons .btn-primary');
+            if (primaryBtn) {
+                primaryBtn.textContent = primaryButtonText;
+                primaryBtn.href = primaryButtonUrl;
+            }
+        }
+
+        if (secondaryButtonText && secondaryButtonUrl) {
+            const secondaryBtn = document.querySelector('.hero-buttons .btn-secondary');
+            if (secondaryBtn) {
+                secondaryBtn.textContent = secondaryButtonText;
+                secondaryBtn.href = secondaryButtonUrl;
             }
         }
     }
@@ -383,7 +406,7 @@ class SanityContentManager {
     renderBooking() {
         if (!this.content.booking) return;
 
-        const { label, heading, description, buttonText, buttonUrl } = this.content.booking;
+        const { label, heading, description, airbnbButtonText, airbnbUrl, vrboButtonText, vrboUrl, contactQuestionText, contactEmail } = this.content.booking;
 
         const labelEl = document.querySelector('#book .section-label');
         if (labelEl) labelEl.textContent = label;
@@ -394,10 +417,102 @@ class SanityContentManager {
         const descEl = document.querySelector('#book p');
         if (descEl) descEl.textContent = description;
 
-        const btnEl = document.querySelector('#book .btn-primary');
-        if (btnEl) {
-            btnEl.textContent = buttonText;
-            btnEl.href = buttonUrl;
+        // Update Airbnb button
+        const airbnbBtn = document.querySelector('#book .btn-booking.airbnb');
+        if (airbnbBtn && airbnbButtonText && airbnbUrl) {
+            airbnbBtn.textContent = airbnbButtonText;
+            airbnbBtn.href = airbnbUrl;
+        }
+
+        // Update VRBO button
+        const vrboBtn = document.querySelector('#book .btn-booking.vrbo');
+        if (vrboBtn && vrboButtonText && vrboUrl) {
+            vrboBtn.textContent = vrboButtonText;
+            vrboBtn.href = vrboUrl;
+        }
+
+        // Update contact info
+        if (contactQuestionText) {
+            const contactQuestionEl = document.querySelector('#book .contact-info p');
+            if (contactQuestionEl) contactQuestionEl.textContent = contactQuestionText;
+        }
+
+        if (contactEmail) {
+            const contactEmailEl = document.querySelector('#book .contact-info a');
+            if (contactEmailEl) {
+                contactEmailEl.href = `mailto:${contactEmail}`;
+                contactEmailEl.textContent = contactEmail;
+            }
+        }
+    }
+
+    // Render banner carousel
+    renderBannerCarousel() {
+        if (!this.content.bannerCarousel || !this.content.bannerCarousel.images) return;
+
+        const { images } = this.content.bannerCarousel;
+        if (!images || images.length === 0) return;
+
+        const track = document.querySelector('.banner-carousel-track');
+        if (!track) return;
+
+        // Create slides - original + duplicates for seamless loop
+        const slides = images.map(image => `
+            <div class="banner-carousel-slide">
+                <img
+                    src="${this.getImageUrl(image, { width: 1200, fit: 'crop' })}"
+                    alt="${image.alt || 'Cabin photo'}"
+                    loading="lazy">
+            </div>
+        `).join('');
+
+        // Duplicate slides for seamless loop (aria-hidden for duplicates)
+        const duplicateSlides = images.map(image => `
+            <div class="banner-carousel-slide" aria-hidden="true">
+                <img
+                    src="${this.getImageUrl(image, { width: 1200, fit: 'crop' })}"
+                    alt=""
+                    loading="lazy">
+            </div>
+        `).join('');
+
+        track.innerHTML = slides + duplicateSlides;
+
+        // Reinitialize carousel if function exists
+        if (typeof window.initBannerCarousel === 'function') {
+            window.initBannerCarousel();
+        }
+    }
+
+    // Render site settings (footer, nav, etc.)
+    renderSiteSettings() {
+        if (!this.content.siteSettings) return;
+
+        const { siteName, siteLocation, copyrightText } = this.content.siteSettings;
+
+        // Update logo in nav
+        if (siteName) {
+            const logo = document.querySelector('.logo');
+            if (logo) logo.textContent = siteName;
+
+            // Update footer brand name
+            const footerBrand = document.querySelector('.footer-brand h3');
+            if (footerBrand) footerBrand.textContent = siteName;
+        }
+
+        // Update footer location
+        if (siteLocation) {
+            const footerLocation = document.querySelector('.footer-brand p');
+            if (footerLocation) footerLocation.textContent = siteLocation;
+        }
+
+        // Update copyright with current year
+        if (copyrightText) {
+            const currentYear = new Date().getFullYear();
+            const footerCopyright = document.querySelector('.footer-bottom p');
+            if (footerCopyright) {
+                footerCopyright.textContent = `© ${currentYear} ${copyrightText}`;
+            }
         }
     }
 
@@ -410,7 +525,9 @@ class SanityContentManager {
 
         await this.fetchContent();
 
+        this.renderSiteSettings();
         this.renderHero();
+        this.renderBannerCarousel();
         this.renderAbout();
         this.renderExperience();
         this.renderLocation();

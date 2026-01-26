@@ -5,7 +5,7 @@ import {media} from 'sanity-plugin-media'
 import {schemaTypes} from './schemaTypes'
 
 // List of singleton document types
-const singletonTypes = new Set(['hero', 'about', 'experienceSection', 'locationSection', 'gallery', 'booking'])
+const singletonTypes = new Set(['hero', 'about', 'experienceSection', 'locationSection', 'gallery', 'booking', 'bannerCarousel', 'siteSettings'])
 
 // List of singleton document IDs
 const singletonIds = new Set([
@@ -15,6 +15,8 @@ const singletonIds = new Set([
   'locationSection',
   'gallery',
   'booking',
+  'bannerCarousel',
+  'siteSettings',
 ])
 
 export default defineConfig({
@@ -49,6 +51,10 @@ export default defineConfig({
               .title('About Section')
               .id('about')
               .child(S.document().schemaType('about').documentId('about')),
+            S.listItem()
+              .title('Banner Carousel')
+              .id('bannerCarousel')
+              .child(S.document().schemaType('bannerCarousel').documentId('bannerCarousel')),
             S.divider(),
             S.listItem()
               .title('Experience Section')
@@ -71,6 +77,11 @@ export default defineConfig({
               .title('Booking Section')
               .id('booking')
               .child(S.document().schemaType('booking').documentId('booking')),
+            S.divider(),
+            S.listItem()
+              .title('Site Settings')
+              .id('siteSettings')
+              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
           ]),
     }),
     media({

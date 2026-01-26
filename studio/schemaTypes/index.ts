@@ -6,6 +6,8 @@ import locationSection from './locationSection'
 import locationPoint from './locationPoint'
 import gallery from './gallery'
 import booking from './booking'
+import bannerCarousel from './bannerCarousel'
+import siteSettings from './siteSettings'
 
 export const schemaTypes = [
   // Singletons
@@ -15,6 +17,8 @@ export const schemaTypes = [
   locationSection,
   gallery,
   booking,
+  bannerCarousel,
+  siteSettings,
 
   // Collections
   experienceCard,
