@@ -26,7 +26,7 @@ class SanityContentManager {
         };
     }
 
-    // Helper to get image URL from Sanity with proper cropping
+    // Helper to get image URL from Sanity with flexible aspect ratios
     getImageUrl(image, options = {}) {
         if (!image?.asset?._ref) return '';
 
@@ -35,11 +35,12 @@ class SanityContentManager {
         const [width, height] = dimensions.split('x').map(Number);
 
         // Build URL with parameters
+        // Default to 'max' to preserve aspect ratio, only use 'crop' when explicitly needed
         const params = new URLSearchParams({
             w: options.width || 1200,
             h: options.height || '',
             auto: 'format',
-            fit: options.fit || 'crop',
+            fit: options.fit || 'max',
         });
 
         // Remove empty height
@@ -229,8 +230,8 @@ class SanityContentManager {
                 carousel.innerHTML = photos.map((photo, index) => `
                     <div class="house-carousel-slide">
                         <img
-                            src="${this.getImageUrl(photo, { width: 1200, fit: 'crop' })}"
-                            srcset="${this.getImageUrl(photo, { width: 600, fit: 'crop' })} 600w, ${this.getImageUrl(photo, { width: 1200, fit: 'crop' })} 1200w, ${this.getImageUrl(photo, { width: 1600, fit: 'crop' })} 1600w"
+                            src="${this.getImageUrl(photo, { width: 1200 })}"
+                            srcset="${this.getImageUrl(photo, { width: 600 })} 600w, ${this.getImageUrl(photo, { width: 1200 })} 1200w, ${this.getImageUrl(photo, { width: 1600 })} 1600w"
                             sizes="(max-width: 768px) 100vw, 800px"
                             alt="${photo.alt || 'Cabin photo'}"
                             loading="${index === 0 ? 'eager' : 'lazy'}">
@@ -278,8 +279,8 @@ class SanityContentManager {
                     <div class="experience-card">
                         <div class="experience-image">
                             <img
-                                src="${this.getImageUrl(card.image, { width: 800, fit: 'crop' })}"
-                                srcset="${this.getImageUrl(card.image, { width: 600, fit: 'crop' })} 600w, ${this.getImageUrl(card.image, { width: 800, fit: 'crop' })} 800w"
+                                src="${this.getImageUrl(card.image, { width: 800 })}"
+                                srcset="${this.getImageUrl(card.image, { width: 600 })} 600w, ${this.getImageUrl(card.image, { width: 800 })} 800w"
                                 sizes="(max-width: 768px) 100vw, 600px"
                                 alt="${card.title}"
                                 loading="lazy">
@@ -316,8 +317,8 @@ class SanityContentManager {
                 if (imagesContainer) {
                     imagesContainer.innerHTML = section.images.map((image) => `
                         <img
-                            src="${this.getImageUrl(image, { width: 800, fit: 'crop' })}"
-                            srcset="${this.getImageUrl(image, { width: 600, fit: 'crop' })} 600w, ${this.getImageUrl(image, { width: 800, fit: 'crop' })} 800w"
+                            src="${this.getImageUrl(image, { width: 800 })}"
+                            srcset="${this.getImageUrl(image, { width: 600 })} 600w, ${this.getImageUrl(image, { width: 800 })} 800w"
                             sizes="(max-width: 768px) 100vw, 400px"
                             alt="${image.alt || 'Location view'}"
                             loading="lazy">
@@ -403,8 +404,8 @@ class SanityContentManager {
                 galleryGrid.innerHTML = collection.photos.map(photo => `
                     <div class="gallery-item ${photo.size || 'regular'}">
                         <img
-                            src="${this.getImageUrl(photo, { width: 1200, fit: 'crop' })}"
-                            srcset="${this.getImageUrl(photo, { width: 600, fit: 'crop' })} 600w, ${this.getImageUrl(photo, { width: 1200, fit: 'crop' })} 1200w"
+                            src="${this.getImageUrl(photo, { width: 1200 })}"
+                            srcset="${this.getImageUrl(photo, { width: 600 })} 600w, ${this.getImageUrl(photo, { width: 1200 })} 1200w"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             alt="${photo.alt || 'Gallery photo'}"
                             loading="lazy">
@@ -475,7 +476,7 @@ class SanityContentManager {
         const slides = images.map(image => `
             <div class="banner-carousel-slide">
                 <img
-                    src="${this.getImageUrl(image, { width: 1200, fit: 'crop' })}"
+                    src="${this.getImageUrl(image, { width: 1200 })}"
                     alt="${image.alt || 'Cabin photo'}"
                     loading="lazy">
             </div>
@@ -485,7 +486,7 @@ class SanityContentManager {
         const duplicateSlides = images.map(image => `
             <div class="banner-carousel-slide" aria-hidden="true">
                 <img
-                    src="${this.getImageUrl(image, { width: 1200, fit: 'crop' })}"
+                    src="${this.getImageUrl(image, { width: 1200 })}"
                     alt=""
                     loading="lazy">
             </div>
