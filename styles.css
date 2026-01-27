@@ -411,7 +411,7 @@ a {
 .banner-carousel-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
     display: block;
     pointer-events: none;
@@ -839,13 +839,12 @@ a {
     position: relative;
     overflow: hidden;
     border-radius: 4px;
-    height: 500px;
 }
 
 .experience-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    display: block;
     transition: transform 0.6s ease;
 }
 
@@ -894,7 +893,7 @@ a {
 .gallery-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.6s ease;
 }
 
@@ -942,8 +941,7 @@ a {
 
 .location-images img {
     width: 100%;
-    height: 350px;
-    object-fit: cover;
+    height: auto;
     border-radius: 4px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
