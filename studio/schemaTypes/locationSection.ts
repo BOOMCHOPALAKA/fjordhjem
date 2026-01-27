@@ -26,5 +26,28 @@ export default defineType({
       description: 'Introductory paragraph',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'images',
+      title: 'Section Images',
+      type: 'array',
+      description: 'Scenic images displayed on the right side of the location section',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+              description: 'Describe the image for accessibility',
+            },
+          ],
+        },
+      ],
+      validation: (Rule) => Rule.max(3),
+    }),
   ],
 })

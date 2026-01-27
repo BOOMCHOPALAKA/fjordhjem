@@ -309,6 +309,21 @@ class SanityContentManager {
 
             const introEl = document.querySelector('#location p');
             if (introEl) introEl.textContent = section.intro;
+
+            // Render section images
+            if (section.images && section.images.length > 0) {
+                const imagesContainer = document.querySelector('.location-images');
+                if (imagesContainer) {
+                    imagesContainer.innerHTML = section.images.map((image) => `
+                        <img
+                            src="${this.getImageUrl(image, { width: 800, fit: 'crop' })}"
+                            srcset="${this.getImageUrl(image, { width: 600, fit: 'crop' })} 600w, ${this.getImageUrl(image, { width: 800, fit: 'crop' })} 800w"
+                            sizes="(max-width: 768px) 100vw, 400px"
+                            alt="${image.alt || 'Location view'}"
+                            loading="lazy">
+                    `).join('');
+                }
+            }
         }
 
         // Render location points
