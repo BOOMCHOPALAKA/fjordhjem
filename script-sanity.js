@@ -463,8 +463,17 @@ class SanityContentManager {
 
         // Initialize availability calendar if enabled
         const { showCalendar, airbnbICalUrl } = this.content.booking;
+        console.log('Calendar settings:', { showCalendar, airbnbICalUrl, hasCalendarClass: !!window.AvailabilityCalendar });
+
         if (showCalendar && airbnbICalUrl && window.AvailabilityCalendar) {
+            console.log('Initializing calendar with URL:', airbnbICalUrl);
             new window.AvailabilityCalendar('availabilityCalendar', airbnbICalUrl);
+        } else {
+            console.log('Calendar not initialized:', {
+                showCalendar,
+                hasUrl: !!airbnbICalUrl,
+                hasCalendarClass: !!window.AvailabilityCalendar
+            });
         }
     }
 
