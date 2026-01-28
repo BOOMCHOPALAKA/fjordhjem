@@ -71,5 +71,18 @@ export default defineType({
       description: 'Email address for inquiries',
       validation: (Rule) => Rule.required().email(),
     }),
+    defineField({
+      name: 'showCalendar',
+      title: 'Show Availability Calendar',
+      type: 'boolean',
+      description: 'Display the availability calendar on the booking section',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'airbnbICalUrl',
+      title: 'Airbnb iCal Feed URL',
+      type: 'url',
+      description: 'iCal feed URL from Airbnb (Settings → Availability → Export Calendar). Used to display availability on your site.',
+    }),
   ],
 })

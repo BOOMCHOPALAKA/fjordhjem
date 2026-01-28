@@ -460,6 +460,12 @@ class SanityContentManager {
                 contactEmailEl.textContent = contactEmail;
             }
         }
+
+        // Initialize availability calendar if enabled
+        const { showCalendar, airbnbICalUrl } = this.content.booking;
+        if (showCalendar && airbnbICalUrl && window.AvailabilityCalendar) {
+            new window.AvailabilityCalendar('availabilityCalendar', airbnbICalUrl);
+        }
     }
 
     // Render banner carousel
