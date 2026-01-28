@@ -22,11 +22,18 @@ class AvailabilityCalendar {
 
     async fetchBlockedDates() {
         try {
+            console.log('Fetching iCal data from:', this.iCalUrl);
             // Use a CORS proxy for the iCal feed
             const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.iCalUrl)}`;
+            console.log('Using proxy URL:', proxyUrl);
             const response = await fetch(proxyUrl);
+            console.log('Response status:', response.status);
             const icalData = await response.text();
+            console.log('iCal data length:', icalData.length);
+            console.log('First 500 chars of iCal data:', icalData.substring(0, 500));
             this.parseICalData(icalData);
+            console.log('Total blocked dates found:', this.blockedDates.size);
+            console.log('Sample blocked dates:', Array.from(this.blockedDates).slice(0, 10));
         } catch (error) {
             console.error('Failed to fetch iCal data:', error);
             throw error;
@@ -36,16 +43,19 @@ class AvailabilityCalendar {
     parseICalData(icalData) {
         // Parse iCal format to extract blocked date ranges
         const events = icalData.split('BEGIN:VEVENT');
+        console.log('Found', events.length - 1, 'events in iCal data');
 
-        events.forEach(event => {
+        events.forEach((event, index) => {
             if (!event.includes('DTSTART')) return;
 
             const dtstart = event.match(/DTSTART[;:]([^\r\n]+)/);
             const dtend = event.match(/DTEND[;:]([^\r\n]+)/);
 
             if (dtstart && dtend) {
+                console.log(`Event ${index}: DTSTART=${dtstart[1]}, DTEND=${dtend[1]}`);
                 const startDate = this.parseICalDate(dtstart[1]);
                 const endDate = this.parseICalDate(dtend[1]);
+                console.log(`  Parsed as: ${startDate} to ${endDate}`);
 
                 // Add all dates in the range as blocked
                 let currentDate = new Date(startDate);
